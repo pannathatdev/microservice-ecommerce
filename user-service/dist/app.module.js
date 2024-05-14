@@ -27,7 +27,7 @@ exports.AppModule = AppModule = __decorate([
                     federation: 2,
                 }
             }),
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://pipo:Aa123654@pipo.gqdqli4.mongodb.net/microservices'),
+            mongoose_1.MongooseModule.forRoot("mongodb+srv://pipo:Aa123654@pipo.gqdqli4.mongodb.net/microservices"),
             mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
         ],
         controllers: [user_controller_1.UserController],

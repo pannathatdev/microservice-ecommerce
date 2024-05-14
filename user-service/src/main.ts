@@ -1,9 +1,9 @@
-// ไฟล์ที่ใช้งาน AppModule
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(3002); // เปลี่ยนจาก 3001 เป็น 3002
+  console.log(`User Service is running on: ${await app.getUrl()}`);
 }
 bootstrap();

@@ -18,7 +18,7 @@ import {
         federation: 2,
       }
     }),
-    MongooseModule.forRoot('mongodb+srv://pipo:Aa123654@pipo.gqdqli4.mongodb.net/microservices'),
+    MongooseModule.forRoot("mongodb+srv://pipo:Aa123654@pipo.gqdqli4.mongodb.net/microservices"),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UserController],

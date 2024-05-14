@@ -1,43 +1,32 @@
-import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { authContext } from './auth.context';
+import {
+  ApolloGatewayDriver,
+  ApolloGatewayDriverConfig,
+} from '@nestjs/apollo';
+import { IntrospectAndCompose } from '@apollo/gateway';
+import { RemoteGraphQLDataSource } from '@apollo/gateway';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
-      driver: ApolloGatewayDriver, // ระบุ ApolloGatewayDriver ใน driver
-      server: {
-        // cors: true,
-        context: authContext,
-      },
+      driver: ApolloGatewayDriver,
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
-            {
-              name: 'user',
-              url: 'http://localhost:3000/graphql',
-            },
+            { name: 'users', url: 'http://127.0.0.1:3002/graphql' },
+            { name: 'product', url: 'http://localhost:3003/graphql' },
           ],
         }),
-        buildService({ url }) {
+        buildService({ name, url }) {
+          console.log(`Loading service: ${name} at ${url}`);
           return new RemoteGraphQLDataSource({
             url,
-            willSendRequest({ request, context }) {
-              request.http.headers.set(
-                'user',
-                context.user ? JSON.stringify(context.user) : null,
-              );
-            },
           });
         },
       },
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
+
