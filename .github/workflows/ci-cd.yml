@@ -23,19 +23,19 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      working-directory: ./microservice-ecommerce/user-service
+      working-directory: ./user-service
 
     - name: Run lint
       run: npm run lint
-      working-directory: ./microservice-ecommerce/user-service
+      working-directory: ./user-service
 
     - name: Run tests
       run: npm run test
-      working-directory: ./microservice-ecommerce/user-service
+      working-directory: ./user-service
 
     - name: Build project
       run: npm run build
-      working-directory: ./microservice-ecommerce/user-service
+      working-directory: ./user-service
 
     - name: Log in to Docker Hub
       env:
@@ -44,7 +44,7 @@ jobs:
       run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
     - name: Build Docker image
-      run: docker build ./microservice-ecommerce/user-service -t $DOCKER_USERNAME/user-service:${{ github.sha }}
+      run: docker build ./user-service -t $DOCKER_USERNAME/user-service:${{ github.sha }}
 
     - name: Push Docker image to Docker Hub
       run: docker push $DOCKER_USERNAME/user-service:${{ github.sha }}
