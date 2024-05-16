@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./product-service
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run tests
         working-directory: ./product-service
@@ -53,7 +53,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./gateway
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run tests
         working-directory: ./gateway
