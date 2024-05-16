@@ -47,4 +47,4 @@ jobs:
 
       - name: Deploy to production
         run: |
-          # ทำการ deploy โดยรันคำสั่งสำหรับการสร้าง Docker image และ deploy ตามที่เหมาะสมสำหรับแต่ละ microservice
+          build image
