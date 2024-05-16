@@ -1,0 +1,50 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and test user-service
+        run: |
+          cd user-service
+          npm install
+          npm run build
+          npm test
+
+      - name: Build and test product-service
+        run: |
+          cd product-service
+          npm install
+          npm run build
+          npm test
+
+      - name: Build and test gateway
+        run: |
+          cd gateway
+          npm install
+          npm run build
+          npm test
+
+      - name: Deploy to production
+        run: |
+          # ทำการ deploy โดยรันคำสั่งสำหรับการสร้าง Docker image และ deploy ตามที่เหมาะสมสำหรับแต่ละ microservice
