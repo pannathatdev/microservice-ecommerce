@@ -1,0 +1,69 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-product:
+    name: Deploy Product Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image for Product Service
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/product-service:latest ./product-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/product-service:latest
+
+      - name: Deploy to Kubernetes
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.K8S_HOST }}
+          username: ${{ secrets.K8S_USERNAME }}
+          key: ${{ secrets.K8S_SSH_KEY }}
+          script: |
+            kubectl set image deployment/product-service product-service=${{ secrets.DOCKER_USERNAME }}/product-service:latest
+
+  deploy-gateway:
+    name: Deploy Gateway
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image for Gateway
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway:latest ./gateway
+          docker push ${{ secrets.DOCKER_USERNAME }}/gateway:latest
+
+      - name: Deploy to Kubernetes
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.K8S_HOST }}
+          username: ${{ secrets.K8S_USERNAME }}
+          key: ${{ secrets.K8S_SSH_KEY }}
+          script: |
+            kubectl set image deployment/gateway gateway=${{ secrets.DOCKER_USERNAME }}/gateway:latest
