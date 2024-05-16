@@ -34,6 +34,7 @@ jobs:
       - name: Build and test product-service
         run: |
           cd product-service
+          npm install
           npm install @nestjs/graphql @nestjs/apollo @apollo/server graphql
           npm run build
           npm test
